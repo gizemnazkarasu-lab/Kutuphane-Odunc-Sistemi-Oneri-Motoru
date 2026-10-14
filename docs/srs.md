@@ -207,4 +207,6 @@ Bir sistem yöneticisi olarak, kütüphane sistemindeki verilerin yedeğini alma
 
 Aşağıdaki diyagram, üye, kütüphane görevlisi ve sistem yöneticisinin sistemle etkileşimlerini göstermektedir.
 
-![Kütüphane sistemi use case diyagramı](kutuphane_use_case.png)
+![Kütüphane sistemi use case diyagramı](
+kutuphane_use_case.png.jpg
+)
