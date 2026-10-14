@@ -1,4 +1,10 @@
 # Kütüphane Ödünç Sistemi ve Öneri Motoru Tasarım Belgesi
+| Süre     | Ne anlatılacak?                                                        | Kim anlatacak?         | Görev                | Gösterilecek yer                  |
+| -------- | ---------------------------------------------------------------------- | ---------------------- | -------------------- | --------------------------------- |
+| 3 dakika | Gereksinimler ve SRS belgesindeki ilgili bölümler                      | Remziye Ersun          | Arayüz               | SRS.md                            |
+| 2 dakika | Veritabanı tasarımı, sıralama diyagramı, ER diyagramı ve 3NF gerekçesi | Ümmügülsüm Kitapçıoğlu | Veritabanı görevlisi | tasarım.md, 3. ve 4. bölümler     |
+| 2 dakika | Mimari, temel sınıflar, tasarım desenleri ve gerekçeleri               | Gizem Naz Karasu       | Mimarlık             | tasarım.md, 1., 2. ve 5. bölümler |
+
 
 ## 1. Mimari
 
