@@ -203,3 +203,8 @@ Bir sistem yöneticisi olarak, kütüphane sistemindeki verilerin yedeğini alma
 | Performans testlerinin yetersiz kalması nedeniyle yoğun kullanımda sistemin yavaşlaması | Orta | Orta | Farklı kullanıcı ve istek yükleri altında performans testleri yapılmalıdır. |
 | Hatalı giriş denemelerine karşı yeterli güvenlik önlemi bulunmaması | Orta | Yüksek | Belirli sayıda başarısız giriş denemesinden sonra geçici hesap kilitleme uygulanmalı ve giriş denemeleri kontrol edilmelidir. |
 | Ödünç geçmişine göre kitap önerilerinin yanlış oluşturulması (Çekirdek Problem) | Orta | Orta | Kitap önerileri oluşturulurken üyelerin ödünç alma geçmişi doğru analiz edilmeli ve öneri algoritması test edilmelidir. |
+## 6. Use Case Diyagramı
+
+Aşağıdaki diyagram, üye, kütüphane görevlisi ve sistem yöneticisinin sistemle etkileşimlerini göstermektedir.
+
+![Kütüphane sistemi use case diyagramı](use-case.jpg)
