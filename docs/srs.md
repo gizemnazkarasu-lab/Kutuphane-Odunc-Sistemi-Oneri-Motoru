@@ -15,7 +15,7 @@
 
 ### 1.2 Amaç
 
-Bu belge tasarlanan sistemin işlevlerini, kullanıcıya sunduğu hizmeti detaylı bir şekilde açıklamaktadır. Rezervasyon sırasının doğru yönetilmesi, gecikme cezalarının belirlenen kurallara göre hesaplanması ve ödünç geçmişinden anlamlı kitap önerileri üretmesidir.
+Bu belge tasarlanan sistemin işlevlerini, kullanıcıya sunduğu hizmeti detaylı bir şekilde açıklamaktadır. Rezervasyon sırasının doğru yönetilmesi, gecikme cezalarının belirlenen kurallara göre hesaplanması ve üyenin listediği kitapların benzeri ya da sevebileceğini düşündüğü kitap önerileri alması sağlanır.
 
 
 ### 1.3 Çekirdek Problem Tanımı
