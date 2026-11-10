@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "title": "Kürk Mantolu Madonna",
+        "isbn": "978-975-363-802-9",
+        "categoryId": 1,
+        "coverPath": "kurk-mantolu-madonna.jpg",
+        "authorIds": [
+            1
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Sefiller",
+        "isbn": "978-975-458-717-3",
+        "categoryId": 2,
+        "coverPath": "sefiller.jpg",
+        "authorIds": [
+            2
+        ]
+    },
+    {
+        "id": 3,
+        "title": "İçimizdeki Şeytan",
+        "isbn": "978-975-363-803-6",
+        "categoryId": 1,
+        "coverPath": "icimizdeki-seytan.jpg",
+        "authorIds": [
+            1
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Kuyucaklı Yusuf",
+        "isbn": "978-975-363-804-3",
+        "categoryId": 1,
+        "coverPath": "kuyucakli-yusuf.jpg",
+        "authorIds": [
+            1
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Saatleri Ayarlama Enstitüsü",
+        "isbn": "978-975-995-576-2",
+        "categoryId": 1,
+        "coverPath": "saatleri-ayarlama.jpg",
+        "authorIds": [
+            3
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Suç ve Ceza",
+        "isbn": "978-975-458-902-3",
+        "categoryId": 2,
+        "coverPath": "suc-ve-ceza.jpg",
+        "authorIds": [
+            4
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Tutunamayanlar",
+        "isbn": "978-975-470-011-4",
+        "categoryId": 1,
+        "coverPath": "tutunamayanlar.jpg",
+        "authorIds": [
+            5
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Dune",
+        "isbn": "978-605-375-479-4",
+        "categoryId": 3,
+        "coverPath": "dune.jpg",
+        "authorIds": [
+            6
+        ]
+    },
+    {
+        "id": 9,
+        "title": "Temiz Kod (Clean Code)",
+        "isbn": "978-605-912-901-5",
+        "categoryId": 4,
+        "coverPath": "clean-code.jpg",
+        "authorIds": [
+            7
+        ]
+    }
+]

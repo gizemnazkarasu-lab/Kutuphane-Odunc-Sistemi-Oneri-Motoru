@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "bookId": 1,
+        "inventoryCode": "K-001",
+        "status": "loaned"
+    },
+    {
+        "id": 2,
+        "bookId": 1,
+        "inventoryCode": "K-002",
+        "status": "available"
+    },
+    {
+        "id": 3,
+        "bookId": 2,
+        "inventoryCode": "K-003",
+        "status": "loaned"
+    },
+    {
+        "id": 4,
+        "bookId": 3,
+        "inventoryCode": "K-004",
+        "status": "loaned"
+    },
+    {
+        "id": 5,
+        "bookId": 3,
+        "inventoryCode": "K-005",
+        "status": "available"
+    },
+    {
+        "id": 6,
+        "bookId": 4,
+        "inventoryCode": "K-006",
+        "status": "loaned"
+    },
+    {
+        "id": 7,
+        "bookId": 4,
+        "inventoryCode": "K-007",
+        "status": "available"
+    },
+    {
+        "id": 8,
+        "bookId": 5,
+        "inventoryCode": "K-008",
+        "status": "loaned"
+    },
+    {
+        "id": 9,
+        "bookId": 6,
+        "inventoryCode": "K-009",
+        "status": "available"
+    },
+    {
+        "id": 10,
+        "bookId": 7,
+        "inventoryCode": "K-010",
+        "status": "available"
+    },
+    {
+        "id": 11,
+        "bookId": 8,
+        "inventoryCode": "K-011",
+        "status": "available"
+    },
+    {
+        "id": 12,
+        "bookId": 9,
+        "inventoryCode": "K-012",
+        "status": "available"
+    }
+]

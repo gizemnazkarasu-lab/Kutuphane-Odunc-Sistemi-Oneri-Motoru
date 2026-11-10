@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "actorId": 6,
+        "actorName": "Sistem Yöneticisi",
+        "action": "SEED_DATA",
+        "details": "Sistem başlangıç JSON verileri oluşturuldu.",
+        "createdAt": "2026-11-10 12:56:02"
+    },
+    {
+        "id": 2,
+        "actorId": 1,
+        "actorName": "Kullanıcı #1",
+        "action": "LOAN_BORROW",
+        "details": "Üye #1 için Kopya K-001 ödünç verildi (Teslim: 24.11.2026).",
+        "createdAt": "2026-11-10 13:42:16"
+    },
+    {
+        "id": 3,
+        "actorId": 3,
+        "actorName": "Kullanıcı #3",
+        "action": "LOAN_BORROW",
+        "details": "Üye #3 için Kopya K-004 ödünç verildi (Teslim: 24.11.2026).",
+        "createdAt": "2026-11-10 13:42:40"
+    }
+]

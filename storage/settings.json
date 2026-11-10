@@ -1,0 +1,9 @@
+{
+    "loanDurationDays": 14,
+    "maxActiveLoans": 5,
+    "maxRenewals": 1,
+    "reservationHoldDays": 3,
+    "dailyFineRateInKurus": 500,
+    "maximumFineInKurus": 10000,
+    "finePolicy": "calendar"
+}

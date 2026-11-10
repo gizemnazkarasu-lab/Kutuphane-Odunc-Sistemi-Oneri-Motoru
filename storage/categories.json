@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Roman"
+    },
+    {
+        "id": 2,
+        "name": "Dünya Klasikleri"
+    },
+    {
+        "id": 3,
+        "name": "Bilim Kurgu"
+    },
+    {
+        "id": 4,
+        "name": "Yazılım ve Teknoloji"
+    },
+    {
+        "id": 5,
+        "name": "Tarih ve Felsefe"
+    }
+]

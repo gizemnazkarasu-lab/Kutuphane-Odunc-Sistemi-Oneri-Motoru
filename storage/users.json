@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "Ümmügülsüm Kitapçıoğlu",
+        "email": "gulsum@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "member",
+        "active": true,
+        "memberNumber": "UYE-0001"
+    },
+    {
+        "id": 2,
+        "name": "Gizem Naz Karasu",
+        "email": "gizem@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "member",
+        "active": true,
+        "memberNumber": "UYE-0002"
+    },
+    {
+        "id": 3,
+        "name": "Remziye Ersun",
+        "email": "remziye@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "member",
+        "active": true,
+        "memberNumber": "UYE-0003"
+    },
+    {
+        "id": 4,
+        "name": "Ahmet Yılmaz (Üye)",
+        "email": "ahmet@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "member",
+        "active": true,
+        "memberNumber": "UYE-0004"
+    },
+    {
+        "id": 5,
+        "name": "Ayşe Demir (Kütüphaneci)",
+        "email": "kutuphaneci@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "librarian",
+        "active": true,
+        "memberNumber": "GOR-0001"
+    },
+    {
+        "id": 6,
+        "name": "Sistem Yöneticisi",
+        "email": "admin@kutuphane.edu.tr",
+        "passwordHash": "$2y$10$rJD\/mkDCWHo.yvkLtDbwJOk8EgesVuCjz\/GH0oesEzrfloQc85gE2",
+        "role": "admin",
+        "active": true,
+        "memberNumber": "ADM-0001"
+    }
+]
