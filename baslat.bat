@@ -27,10 +27,9 @@ if "%PHP_EXE%"=="" (
 )
 
 if "%PHP_EXE%"=="" (
-    echo [UYARI] Bilgisayarinizda PHP veya XAMPP bulunamadi.
-    echo Lutfen XAMPP kurun veya bu klasoru C:\xampp\htdocs\ icine kopyalayip http://localhost/kutuphane adresinden acin.
-    pause
-    exit /b 1
+    echo Bilgisayarinizda PHP kurulu olmadigi icin dogrudan Tarayici Onizleme surumu aciliyor...
+    start "" "%~dp0canli-onizleme.html"
+    exit /b 0
 )
 
 echo Kutuphane Odunc Sistemi baslatiliyor: http://localhost:8080

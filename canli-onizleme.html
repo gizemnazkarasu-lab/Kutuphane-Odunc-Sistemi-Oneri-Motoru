@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kütüphane Ödünç Sistemi ve Öneri Motoru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burgundy: #4A0E17;
+            --burgundy-soft: #681D29;
+            --cherry-blossom: #E2B6B8;
+            --cherry-light: #F2DADC;
+            --moss: #5A5831;
+            --moss-muted: #848157;
+            --sky-blue: #BBC8CE;
+            --sky-light: #D9E2E6;
+            --sand: #ECE4DA;
+            --sand-light: #F6F0E6;
+            --sand-card: #FAF6EE;
+            --ink: #2C1810;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--sand);
+            color: var(--burgundy);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2, h3, h4, .brand-logo, .editorial-heading {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            color: var(--burgundy);
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .top-moss-bar {
+            background-color: var(--moss);
+            color: var(--sand-light);
+            padding: 8px 28px;
+            font-size: 12.5px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            letter-spacing: 0.3px;
+        }
+        .top-moss-bar .role-list {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .top-moss-bar .role-label {
+            color: var(--cherry-blossom);
+            font-weight: 600;
+            margin-right: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+        }
+        .role-pill {
+            color: var(--sand-light);
+            text-decoration: none;
+            padding: 3px 10px;
+            border: 1px solid rgba(236, 228, 218, 0.35);
+            font-size: 12px;
+            transition: all 0.2s ease;
+            background: transparent;
+            cursor: pointer;
+        }
+        .role-pill:hover, .role-pill.active {
+            background-color: var(--cherry-blossom);
+            color: var(--burgundy);
+            border-color: var(--cherry-blossom);
+            font-weight: 600;
+        }
+        .role-pill.reset-btn {
+            border-color: var(--cherry-blossom);
+            color: var(--cherry-blossom);
+        }
+        .role-pill.reset-btn:hover {
+            background-color: var(--burgundy);
+            color: var(--sand-light);
+            border-color: var(--burgundy);
+        }
+        .site-header {
+            background-color: var(--sand-light);
+            padding: 20px 42px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .brand-logo {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--burgundy);
+            text-decoration: none;
+            line-height: 1.1;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+        }
+        .brand-sub {
+            display: block;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: var(--moss);
+            margin-top: 3px;
+            font-weight: 600;
+        }
+        .main-nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 22px;
+        }
+        .main-nav a {
+            text-decoration: none;
+            color: var(--burgundy);
+            font-size: 14px;
+            font-weight: 500;
+            padding-bottom: 3px;
+            border-bottom: 1.5px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .main-nav a:hover, .main-nav a.active {
+            border-bottom-color: var(--burgundy);
+            color: var(--burgundy);
+        }
+        .main-nav a.staff-link {
+            color: var(--moss);
+            font-weight: 600;
+        }
+        .main-nav a.staff-link:hover {
+            border-bottom-color: var(--moss);
+        }
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 13px;
+            color: var(--moss);
+        }
+        .header-user strong { color: var(--burgundy); }
+        .notif-count {
+            display: inline-block;
+            background-color: var(--burgundy);
+            color: var(--sand-light);
+            font-size: 11px;
+            padding: 1px 6px;
+            margin-left: 4px;
+            font-weight: 600;
+        }
+        .trim-border {
+            height: 9px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--burgundy) 0px,
+                var(--burgundy) 14px,
+                var(--sand-light) 14px,
+                var(--sand-light) 22px,
+                var(--sky-blue) 22px,
+                var(--sky-blue) 36px,
+                var(--sand-light) 36px,
+                var(--sand-light) 44px
+            );
+            border-top: 1px solid rgba(74, 14, 23, 0.18);
+            border-bottom: 1px solid rgba(74, 14, 23, 0.18);
+        }
+        .striped-stage {
+            flex: 1;
+            padding: 44px 24px 60px 24px;
+            background: repeating-linear-gradient(
+                90deg,
+                #8C8861 0px,
+                #8C8861 48px,
+                var(--sand) 48px,
+                var(--sand) 64px,
+                var(--sky-blue) 64px,
+                var(--sky-blue) 88px,
+                var(--sand) 88px,
+                var(--sand) 104px
+            );
+        }
+        .cream-sheet {
+            max-width: 1080px;
+            margin: 0 auto;
+            background-color: var(--sand-light);
+            border: 1px solid rgba(90, 88, 49, 0.35);
+            box-shadow: 0 18px 40px rgba(44, 24, 16, 0.12);
+            padding: 40px 46px;
+        }
+        .sheet-header {
+            border-bottom: 1px solid rgba(74, 14, 23, 0.2);
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+        .sheet-title { margin: 0; font-size: 32px; color: var(--burgundy); }
+        .sheet-meta {
+            font-size: 13px;
+            color: var(--moss);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .alert {
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            border: 1px solid var(--burgundy);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .alert-success { background-color: var(--cherry-light); color: var(--burgundy); border-color: var(--burgundy); }
+        .alert-error { background-color: var(--burgundy); color: var(--sand-light); border-color: var(--burgundy); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0 26px 0;
+            background-color: var(--sand-card);
+            border: 1px solid rgba(74, 14, 23, 0.25);
+        }
+        th, td {
+            border-bottom: 1px solid rgba(74, 14, 23, 0.15);
+            padding: 13px 16px;
+            text-align: left;
+            font-size: 14px;
+            color: var(--burgundy);
+        }
+        th {
+            background-color: var(--cherry-blossom);
+            color: var(--burgundy);
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            border-bottom: 1.5px solid var(--burgundy);
+        }
+        tr:hover td { background-color: rgba(226, 182, 184, 0.22); }
+        label {
+            display: block;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--moss);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], select {
+            width: 100%;
+            padding: 9px 4px;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--moss);
+            color: var(--burgundy);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            border-radius: 0;
+        }
+        input:focus, select:focus { outline: none; border-bottom-color: var(--burgundy); }
+        .btn {
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1.5px solid var(--burgundy);
+            background-color: transparent;
+            color: var(--burgundy);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { background-color: var(--cherry-blossom); color: var(--burgundy); }
+        .btn-primary { background-color: var(--burgundy); color: var(--sand-light); border-color: var(--burgundy); }
+        .btn-primary:hover { background-color: var(--moss); border-color: var(--moss); color: var(--sand-light); }
+        .btn-danger { border-color: var(--burgundy); background-color: var(--cherry-light); color: var(--burgundy); }
+        .btn-danger:hover { background-color: var(--burgundy); color: var(--sand-light); }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border: 1px solid transparent;
+        }
+        .status-ok { background-color: var(--moss); color: var(--sand-light); }
+        .status-warn { background-color: var(--sky-blue); color: var(--burgundy); border-color: var(--moss); }
+        .status-err { background-color: var(--cherry-blossom); color: var(--burgundy); border-color: var(--burgundy); }
+        .card-box {
+            background-color: var(--sand-card);
+            border: 1px solid rgba(90, 88, 49, 0.35);
+            padding: 22px 24px;
+            margin-bottom: 22px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 12.5px;
+            background: rgba(187, 200, 206, 0.35);
+            padding: 2px 6px;
+            color: var(--burgundy);
+        }
+        a { color: var(--burgundy); cursor: pointer; }
+        @media (max-width: 768px) {
+            .site-header { padding: 16px 20px; }
+            .cream-sheet { padding: 24px 20px; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const STORAGE_KEY = 'kutuphane_json_db_v2';
+
+function fmtDate(d) {
+    const dt = (d instanceof Date) ? d : new Date(d);
+    const pad = n => String(n).padStart(2, '0');
+    return `${pad(dt.getDate())}.${pad(dt.getMonth()+1)}.${dt.getFullYear()}`;
+}
+function fmtDateTime(d) {
+    const dt = (d instanceof Date) ? d : new Date(d);
+    const pad = n => String(n).padStart(2, '0');
+    return `${pad(dt.getDate())}.${pad(dt.getMonth()+1)}.${dt.getFullYear()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+}
+function addDays(d, days) {
+    const dt = new Date((d instanceof Date) ? d.getTime() : new Date(d).getTime());
+    dt.setDate(dt.getDate() + days);
+    return dt;
+}
+function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getDefaultData() {
+    const now = new Date();
+    return {
+        currentUserId: 1,
+        settings: {
+            loanDurationDays: 14,
+            maxActiveLoans: 5,
+            maxRenewals: 1,
+            reservationHoldDays: 3,
+            dailyFineRateInKurus: 500,
+            maximumFineInKurus: 10000,
+            finePolicy: 'calendar'
+        },
+        users: [
+            { id: 1, name: 'Ümmügülsüm Kitapçıoğlu', email: 'gulsum@kutuphane.edu.tr', password: '123456', role: 'member', active: true, memberNumber: 'UYE-0001' },
+            { id: 2, name: 'Gizem Naz Karasu', email: 'gizem@kutuphane.edu.tr', password: '123456', role: 'member', active: true, memberNumber: 'UYE-0002' },
+            { id: 3, name: 'Remziye Ersun', email: 'remziye@kutuphane.edu.tr', password: '123456', role: 'member', active: true, memberNumber: 'UYE-0003' },
+            { id: 4, name: 'Ahmet Yılmaz (Üye)', email: 'ahmet@kutuphane.edu.tr', password: '123456', role: 'member', active: true, memberNumber: 'UYE-0004' },
+            { id: 5, name: 'Ayşe Demir (Kütüphaneci)', email: 'kutuphaneci@kutuphane.edu.tr', password: '123456', role: 'librarian', active: true, memberNumber: 'GOR-0001' },
+            { id: 6, name: 'Sistem Yöneticisi', email: 'admin@kutuphane.edu.tr', password: '123456', role: 'admin', active: true, memberNumber: 'ADM-0001' }
+        ],
+        categories: [
+            { id: 1, name: 'Roman' },
+            { id: 2, name: 'Dünya Klasikleri' },
+            { id: 3, name: 'Bilim Kurgu' },
+            { id: 4, name: 'Yazılım ve Teknoloji' },
+            { id: 5, name: 'Tarih ve Felsefe' }
+        ],
+        authors: [
+            { id: 1, name: 'Sabahattin Ali' },
+            { id: 2, name: 'Victor Hugo' },
+            { id: 3, name: 'Ahmet Hamdi Tanpınar' },
+            { id: 4, name: 'Fyodor Dostoyevski' },
+            { id: 5, name: 'Oğuz Atay' },
+            { id: 6, name: 'Frank Herbert' },
+            { id: 7, name: 'Robert C. Martin' }
+        ],
+        books: [
+            { id: 1, title: 'Kürk Mantolu Madonna', isbn: '978-975-363-802-9', categoryId: 1, authorIds: [1] },
+            { id: 2, title: 'Sefiller', isbn: '978-975-458-717-3', categoryId: 2, authorIds: [2] },
+            { id: 3, title: 'İçimizdeki Şeytan', isbn: '978-975-363-803-6', categoryId: 1, authorIds: [1] },
+            { id: 4, title: 'Kuyucaklı Yusuf', isbn: '978-975-363-804-3', categoryId: 1, authorIds: [1] },
+            { id: 5, title: 'Saatleri Ayarlama Enstitüsü', isbn: '978-975-995-576-2', categoryId: 1, authorIds: [3] },
+            { id: 6, title: 'Suç ve Ceza', isbn: '978-975-458-902-3', categoryId: 2, authorIds: [4] },
+            { id: 7, title: 'Tutunamayanlar', isbn: '978-975-470-011-4', categoryId: 1, authorIds: [5] },
+            { id: 8, title: 'Dune', isbn: '978-605-375-479-4', categoryId: 3, authorIds: [6] },
+            { id: 9, title: 'Temiz Kod (Clean Code)', isbn: '978-605-912-901-5', categoryId: 4, authorIds: [7] }
+        ],
+        copies: [
+            { id: 1, bookId: 1, inventoryCode: 'K-001', status: 'available' },
+            { id: 2, bookId: 1, inventoryCode: 'K-002', status: 'available' },
+            { id: 3, bookId: 2, inventoryCode: 'K-003', status: 'loaned' },
+            { id: 4, bookId: 3, inventoryCode: 'K-004', status: 'available' },
+            { id: 5, bookId: 3, inventoryCode: 'K-005', status: 'available' },
+            { id: 6, bookId: 4, inventoryCode: 'K-006', status: 'loaned' },
+            { id: 7, bookId: 4, inventoryCode: 'K-007', status: 'available' },
+            { id: 8, bookId: 5, inventoryCode: 'K-008', status: 'loaned' },
+            { id: 9, bookId: 6, inventoryCode: 'K-009', status: 'available' },
+            { id: 10, bookId: 7, inventoryCode: 'K-010', status: 'available' },
+            { id: 11, bookId: 8, inventoryCode: 'K-011', status: 'available' },
+            { id: 12, bookId: 9, inventoryCode: 'K-012', status: 'available' }
+        ],
+        loans: [
+            { id: 1, userId: 2, copyId: 1, borrowedAt: addDays(now,-45).toISOString(), dueAt: addDays(now,-31).toISOString(), returnedAt: addDays(now,-33).toISOString(), renewalCount: 0 },
+            { id: 2, userId: 2, copyId: 4, borrowedAt: addDays(now,-30).toISOString(), dueAt: addDays(now,-16).toISOString(), returnedAt: addDays(now,-18).toISOString(), renewalCount: 0 },
+            { id: 3, userId: 2, copyId: 7, borrowedAt: addDays(now,-25).toISOString(), dueAt: addDays(now,-11).toISOString(), returnedAt: addDays(now,-12).toISOString(), renewalCount: 0 },
+            { id: 4, userId: 3, copyId: 2, borrowedAt: addDays(now,-40).toISOString(), dueAt: addDays(now,-26).toISOString(), returnedAt: addDays(now,-28).toISOString(), renewalCount: 0 },
+            { id: 5, userId: 3, copyId: 5, borrowedAt: addDays(now,-28).toISOString(), dueAt: addDays(now,-14).toISOString(), returnedAt: addDays(now,-15).toISOString(), renewalCount: 0 },
+            { id: 6, userId: 3, copyId: 7, borrowedAt: addDays(now,-20).toISOString(), dueAt: addDays(now,-6).toISOString(), returnedAt: addDays(now,-7).toISOString(), renewalCount: 0 },
+            { id: 7, userId: 4, copyId: 1, borrowedAt: addDays(now,-35).toISOString(), dueAt: addDays(now,-21).toISOString(), returnedAt: addDays(now,-22).toISOString(), renewalCount: 0 },
+            { id: 8, userId: 4, copyId: 4, borrowedAt: addDays(now,-20).toISOString(), dueAt: addDays(now,-6).toISOString(), returnedAt: addDays(now,-8).toISOString(), renewalCount: 0 },
+            { id: 9, userId: 1, copyId: 9, borrowedAt: addDays(now,-30).toISOString(), dueAt: addDays(now,-16).toISOString(), returnedAt: addDays(now,-12).toISOString(), renewalCount: 0 },
+            { id: 10, userId: 1, copyId: 3, borrowedAt: addDays(now,-5).toISOString(), dueAt: addDays(now,9).toISOString(), returnedAt: null, renewalCount: 0 },
+            { id: 11, userId: 1, copyId: 6, borrowedAt: addDays(now,-25).toISOString(), dueAt: addDays(now,-5).toISOString(), returnedAt: null, renewalCount: 1 },
+            { id: 12, userId: 2, copyId: 8, borrowedAt: addDays(now,-10).toISOString(), dueAt: addDays(now,4).toISOString(), returnedAt: null, renewalCount: 0 }
+        ],
+        reservations: [
+            { id: 1, userId: 2, bookId: 2, allocatedCopyId: null, createdAt: addDays(now,-3).toISOString(), allocatedAt: null, expiresAt: null, status: 'waiting' },
+            { id: 2, userId: 3, bookId: 2, allocatedCopyId: null, createdAt: addDays(now,-2).toISOString(), allocatedAt: null, expiresAt: null, status: 'waiting' },
+            { id: 3, userId: 1, bookId: 5, allocatedCopyId: null, createdAt: addDays(now,-1).toISOString(), allocatedAt: null, expiresAt: null, status: 'waiting' }
+        ],
+        fines: [
+            { id: 1, loanId: 9, amountInKurus: 2000, calculatedAt: addDays(now,-12).toISOString() }
+        ],
+        payments: [],
+        notifications: [],
+        auditLogs: [
+            { id: 1, actorName: 'Sistem Yöneticisi', action: 'SEED_DATA', details: 'Sistem başlangıç JSON verileri oluşturuldu.', createdAt: fmtDateTime(now) }
+        ]
+    };
+}
+
+let db = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || getDefaultData();
+let state = {
+    route: 'catalog',
+    params: {},
+    flashSuccess: null,
+    flashError: null
+};
+
+function saveDb() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+}
+function nextId(arr) {
+    return arr.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1;
+}
+function navigate(route, params = {}, success = null, error = null) {
+    state.route = route;
+    state.params = params;
+    state.flashSuccess = success;
+    state.flashError = error;
+    render();
+    window.scrollTo(0, 0);
+}
+
+function getCurrentUser() {
+    return db.users.find(u => u.id === db.currentUserId && u.active) || null;
+}
+function getBookAuthors(book) {
+    return (book.authorIds || []).map(id => db.authors.find(a => a.id === id)?.name).filter(Boolean).join(', ') || 'Bilinmeyen Yazar';
+}
+function getCategoryName(catId) {
+    return db.categories.find(c => c.id === catId)?.name || 'Genel';
+}
+function getAvailableCopies(bookId) {
+    return db.copies.filter(c => c.bookId === bookId && c.status === 'available');
+}
+function getRecommendations(bookId) {
+    const copyToBook = {};
+    db.copies.forEach(c => copyToBook[c.id] = c.bookId);
+    const userBooks = {};
+    db.loans.forEach(l => {
+        const bId = copyToBook[l.copyId];
+        if (!bId) return;
+        userBooks[l.userId] = userBooks[l.userId] || {};
+        userBooks[l.userId][bId] = true;
+    });
+    const counts = {};
+    Object.values(userBooks).forEach(bMap => {
+        if (!bMap[bookId]) return;
+        Object.keys(bMap).forEach(otherId => {
+            const oid = Number(otherId);
+            if (oid !== bookId) counts[oid] = (counts[oid] || 0) + 1;
+        });
+    });
+    return Object.entries(counts)
+        .sort((a,b) => b[1] - a[1] || Number(a[0]) - Number(b[0]))
+        .map(([bid, cnt]) => {
+            const b = db.books.find(x => x.id === Number(bid));
+            return b ? { book: b, authors: getBookAuthors(b), sharedReaderCount: cnt } : null;
+        }).filter(Boolean);
+}
+
+function allocateNextForCopy(copyId, now = new Date()) {
+    const copy = db.copies.find(c => c.id === copyId);
+    if (!copy) return null;
+    const waiting = db.reservations
+        .filter(r => r.bookId === copy.bookId && r.status === 'waiting')
+        .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt) || a.id - b.id);
+    if (waiting.length === 0) {
+        copy.status = 'available';
+        saveDb();
+        return null;
+    }
+    const nextRes = waiting[0];
+    const exp = addDays(now, db.settings.reservationHoldDays || 3);
+    nextRes.status = 'allocated';
+    nextRes.allocatedCopyId = copy.id;
+    nextRes.allocatedAt = now.toISOString();
+    nextRes.expiresAt = exp.toISOString();
+    copy.status = 'allocated';
+
+    const book = db.books.find(b => b.id === copy.bookId);
+    const msg = `Rezervasyon sıranız geldi! "${book ? book.title : 'Kitap'}" (${copy.inventoryCode}) kitabının kopyası 3 gün süreyle (${fmtDateTime(exp)} tarihine kadar) sizin için ayrıldı.`;
+    db.notifications.push({
+        id: nextId(db.notifications),
+        userId: nextRes.userId,
+        reservationId: nextRes.id,
+        message: msg,
+        createdAt: now.toISOString(),
+        readAt: null
+    });
+    saveDb();
+    return nextRes;
+}
+
+function render() {
+    const user = getCurrentUser();
+    const unreadCount = user ? db.notifications.filter(n => n.userId === user.id && !n.readAt).length : 0;
+
+    let pageTitle = 'Kitap Kataloğu';
+    let bodyHtml = '';
+
+    if (!user && state.route !== 'register') {
+        state.route = 'login';
+    }
+
+    if (state.route === 'login') {
+        pageTitle = 'Sistem Girişi';
+        bodyHtml = `
+        <div style="max-width: 440px; margin: 12px auto 24px auto;">
+            <div class="card-box" style="padding: 36px 38px; background-color: var(--sand-light);">
+                <h2 style="margin: 0 0 24px 0; text-align: center; font-size: 30px;">sisteme giriş</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div style="margin-bottom: 22px;">
+                        <label>kullanıcı adı, üye no veya e-posta</label>
+                        <input type="text" id="login_cred" placeholder="UYE-0001 veya gulsum@kutuphane.edu.tr" required>
+                    </div>
+                    <div style="margin-bottom: 28px;">
+                        <label>şifre</label>
+                        <input type="password" id="login_pass" value="123456" required>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="min-width: 160px;">giriş yap</button>
+                    </div>
+                </form>
+                <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(90, 88, 49, 0.25); text-align: center;">
+                    <p style="margin: 0 0 12px 0; font-size: 13.5px; color: var(--moss);">Hesabınız yok mu?</p>
+                    <a onclick="navigate('register')" class="btn">kaydol</a>
+                </div>
+            </div>
+            <div class="card-box" style="font-size: 13px;">
+                <strong style="display:block; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.6px; color:var(--moss);">
+                    Kayıtlı Kullanıcı Hesapları (Şifre: 123456)
+                </strong>
+                <ul style="margin: 0; padding-left: 18px;">
+                    ${db.users.map(u => `
+                        <li style="margin-bottom: 6px;">
+                            <code>${esc(u.memberNumber)}</code>
+                            <strong>${esc(u.name)}</strong> (${esc(u.email)} &mdash; ${esc(u.role)})
+                            <a onclick="switchUser(${u.id})" style="margin-left:6px; font-weight:600;">[Giriş]</a>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        </div>`;
+    } else if (state.route === 'register') {
+        pageTitle = 'Yeni Üye Kaydı';
+        bodyHtml = `
+        <div style="max-width: 440px; margin: 12px auto 24px auto;">
+            <div class="card-box" style="padding: 36px 38px; background-color: var(--sand-light);">
+                <h2 style="margin: 0 0 8px 0; text-align: center; font-size: 30px;">yeni üye kaydı</h2>
+                <p style="text-align: center; color: var(--moss); margin: 0 0 24px 0; font-size: 13.5px;">
+                    Kayıt tamamlandığında otomatik olarak kendi hesabınızla oturum açılır.
+                </p>
+                <form onsubmit="handleRegister(event)">
+                    <div style="margin-bottom: 20px;">
+                        <label>ad soyad</label>
+                        <input type="text" id="reg_name" placeholder="Adınız ve Soyadınız" required>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label>e-posta adresi</label>
+                        <input type="email" id="reg_email" placeholder="ornek@kutuphane.edu.tr" required>
+                    </div>
+                    <div style="margin-bottom: 28px;">
+                        <label>şifre</label>
+                        <input type="password" id="reg_pass" placeholder="En az 4 karakter" required>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="min-width: 180px;">kaydı tamamla</button>
+                    </div>
+                </form>
+                <div style="margin-top: 22px; text-align: center;">
+                    <a onclick="navigate('login')" style="font-size: 13px;">Giriş ekranına dön</a>
+                </div>
+            </div>
+        </div>`;
+    } else if (state.route === 'catalog') {
+        pageTitle = 'Kitap Kataloğu';
+        const q = (state.params.q || '').toLowerCase().trim();
+        const catId = Number(state.params.categoryId || 0);
+        const filtered = db.books.filter(b => {
+            if (catId > 0 && b.categoryId !== catId) return false;
+            if (q) {
+                const hay = (b.title + ' ' + getBookAuthors(b) + ' ' + b.isbn).toLowerCase();
+                if (!hay.includes(q)) return false;
+            }
+            return true;
+        });
+
+        bodyHtml = `
+        <form onsubmit="handleCatalogSearch(event)">
+            <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 16px; align-items: end; margin-bottom: 20px;">
+                <div>
+                    <label>Kitap veya yazar ara</label>
+                    <input type="text" id="cat_q" value="${esc(state.params.q || '')}" placeholder="Kitap adı, yazar veya ISBN...">
+                </div>
+                <div>
+                    <label>Kategori</label>
+                    <select id="cat_id">
+                        <option value="0">Tüm Kategoriler</option>
+                        ${db.categories.map(c => `<option value="${c.id}" ${catId === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary" style="padding: 9px 26px;">Ara</button>
+                </div>
+            </div>
+        </form>
+        ${filtered.length === 0 ? `<div class="card-box">Sonuç alanı: Aramanıza uygun kitap bulunamadı.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Kitap</th>
+                    <th>Yazar</th>
+                    <th>Kategori</th>
+                    <th>Müsait kopya</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${filtered.map(b => {
+                    const avail = getAvailableCopies(b.id).length;
+                    return `
+                    <tr>
+                        <td><strong>${esc(b.title)}</strong></td>
+                        <td>${esc(getBookAuthors(b))}</td>
+                        <td>${esc(getCategoryName(b.categoryId))}</td>
+                        <td>
+                            ${avail > 0
+                                ? `<span class="status-badge status-ok">${avail}</span>`
+                                : `<span class="status-badge status-err">0 (Ödünçte / Rezervasyona Uygun)</span>`}
+                        </td>
+                        <td><a class="btn" onclick="navigate('book-detail', {id: ${b.id}})">Detayı Gör</a></td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`}`;
+    } else if (state.route === 'book-detail') {
+        const book = db.books.find(b => b.id === Number(state.params.id)) || db.books[0];
+        pageTitle = book.title + ' — Kitap Detayı ve Öneriler';
+        const copies = db.copies.filter(c => c.bookId === book.id);
+        const availCopies = getAvailableCopies(book.id);
+        const myRes = db.reservations.find(r => r.userId === user.id && r.bookId === book.id && ['waiting','allocated'].includes(r.status));
+        const bookQueue = db.reservations
+            .filter(r => r.bookId === book.id && ['waiting','allocated'].includes(r.status))
+            .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt) || a.id - b.id);
+        const myPos = myRes ? (bookQueue.findIndex(r => r.id === myRes.id) + 1) : null;
+        const recs = getRecommendations(book.id);
+
+        bodyHtml = `
+        <div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 28px;">
+            <div style="width: 165px; height: 225px; background-color: var(--cherry-blossom); border: 1.5px solid var(--burgundy); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px;">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--burgundy); margin-bottom: 10px; border-bottom: 1px solid var(--burgundy); padding-bottom: 4px;">
+                    Kütüphane Nüshası
+                </div>
+                <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 700; color: var(--burgundy); line-height: 1.2;">
+                    ${esc(book.title)}
+                </div>
+                <div style="font-size: 12px; color: var(--moss); margin-top: 10px;">
+                    ${esc(getBookAuthors(book))}
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 280px;">
+                <h2 style="margin: 0 0 12px 0; font-size: 28px;">${esc(book.title)}</h2>
+                <p style="margin: 5px 0;"><strong>Yazar:</strong> ${esc(getBookAuthors(book))}</p>
+                <p style="margin: 5px 0;"><strong>Kategori:</strong> ${esc(getCategoryName(book.categoryId))}</p>
+                <p style="margin: 5px 0;"><strong>ISBN:</strong> ${esc(book.isbn)}</p>
+                <p style="margin: 5px 0 18px 0;"><strong>Müsait kopya:</strong> ${availCopies.length}</p>
+
+                ${availCopies.length > 0 ? `
+                    <button class="btn btn-primary" onclick="borrowCopy(${user.id}, ${availCopies[0].id}, 'book-detail', {id: ${book.id}})">
+                        Uygun Kopyayı Ödünç Al (${esc(availCopies[0].inventoryCode)})
+                    </button>
+                ` : (!myRes ? `
+                    <button class="btn btn-primary" onclick="joinReservationQueue(${book.id})">Rezervasyon Oluştur</button>
+                ` : (myRes.status === 'allocated' && myRes.allocatedCopyId ? `
+                    <div class="card-box" style="background-color: var(--cherry-light); border-color: var(--burgundy); margin-top: 8px;">
+                        <strong>Sıra Sizde:</strong> Bu kitabın bir kopyası <strong>${fmtDateTime(myRes.expiresAt)}</strong> tarihine kadar (3 gün) sizin için ayrılmıştır.<br><br>
+                        <button class="btn btn-primary" onclick="borrowCopy(${user.id}, ${myRes.allocatedCopyId}, 'my-loans')">Ayrılan Kopyayı Teslim Al</button>
+                    </div>
+                ` : ''))}
+
+                <div style="margin-top: 16px; font-weight: 500; color: var(--moss);">
+                    ${myRes
+                        ? `Mesaj alanı: Rezervasyon sıranız ${myPos}. / Zaten sıradasınız. (Durum: <strong>${myRes.status === 'allocated' ? 'Adınıza 3 Günlüğüne Ayrıldı' : 'Bekliyor'}</strong>)`
+                        : (availCopies.length === 0
+                            ? `Mesaj alanı: Müsait kopya bulunmamaktadır. Rezervasyon oluşturarak bekleme sırasına girebilirsiniz.`
+                            : `Mesaj alanı: Kitap ödünç almaya uygundur (14 gün süre, 1 kez uzatma hakkı).`)}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <strong>Fiziksel Kopyalar ve Durumları:</strong>
+            <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                ${copies.map(c => `
+                    <span class="status-badge ${c.status === 'available' ? 'status-ok' : (c.status === 'allocated' ? 'status-warn' : 'status-err')}">
+                        ${esc(c.inventoryCode)} &mdash; ${c.status === 'available' ? 'Müsait' : (c.status === 'allocated' ? 'Rezervasyona Ayrıldı (3 Gün)' : 'Ödünçte')}
+                    </span>
+                `).join('')}
+            </div>
+            ${bookQueue.length > 0 ? `
+                <div style="margin-top: 14px; font-size: 13.5px;">
+                    <strong>Rezervasyon Sırası (${bookQueue.length} üye):</strong>
+                    ${bookQueue.map((r, i) => {
+                        const u = db.users.find(x => x.id === r.userId);
+                        return `<span style="margin-right: 14px;">${i+1}. ${esc(u ? u.name : 'Üye')} (${r.status === 'allocated' ? 'Kopya Ayrıldı' : 'Bekliyor'})</span>`;
+                    }).join('')}
+                </div>
+            ` : ''}
+        </div>
+
+        <h3 style="margin-top: 32px; margin-bottom: 8px; font-size: 24px;">Bunu okuyanlar şunu da okudu</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Önerilen kitap</th>
+                    <th>Yazar</th>
+                    <th>Ortak okur sayısı</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${recs.map(r => `
+                    <tr>
+                        <td><strong>${esc(r.book.title)}</strong></td>
+                        <td>${esc(r.authors)}</td>
+                        <td><span class="status-badge status-ok">${r.sharedReaderCount} ortak okur</span></td>
+                        <td><a class="btn" onclick="navigate('book-detail', {id: ${r.book.id}})">Detayı Gör</a></td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>`;
+    } else if (state.route === 'my-loans') {
+        pageTitle = 'Ödünçlerim ve Geçmişim';
+        const myLoans = db.loans.filter(l => l.userId === user.id).sort((a,b) => b.id - a.id);
+        const active = myLoans.filter(l => !l.returnedAt);
+        const history = myLoans.filter(l => l.returnedAt);
+        const now = new Date();
+
+        bodyHtml = `
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">
+            Aktif ödünç: ${active.length} / 5 &nbsp;&nbsp;|&nbsp;&nbsp; Aktif kayıtlar / Geçmiş
+        </div>
+        <h3>Aktif Ödünç Aldığım Kitaplar</h3>
+        ${active.length === 0 ? `<div class="card-box">Şu anda üzerinizde aktif ödünç kitap bulunmamaktadır.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Kitap</th>
+                    <th>Kopya Kodu</th>
+                    <th>Teslim tarihi</th>
+                    <th>Durum</th>
+                    <th>Uzatma</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${active.map(l => {
+                    const copy = db.copies.find(c => c.id === l.copyId);
+                    const book = copy ? db.books.find(b => b.id === copy.bookId) : null;
+                    const overdue = new Date(l.dueAt) < now;
+                    const canRenew = !overdue && l.renewalCount < 1;
+                    return `
+                    <tr>
+                        <td><strong>${esc(book ? book.title : 'Kitap')}</strong></td>
+                        <td>${esc(copy ? copy.inventoryCode : '-')}</td>
+                        <td>${fmtDate(l.dueAt)}</td>
+                        <td><span class="status-badge ${overdue ? 'status-err' : 'status-ok'}">${overdue ? 'Gecikmiş' : 'Aktif'}</span></td>
+                        <td>${l.renewalCount} / 1</td>
+                        <td>
+                            ${canRenew
+                                ? `<button class="btn" onclick="renewLoan(${l.id})" style="margin-right:8px;">Süreyi Uzat (+14 Gün)</button>`
+                                : `<span style="font-size:12.5px; color:var(--moss); margin-right:8px;">Uzatılamaz</span>`}
+                            <button class="btn btn-primary" onclick="returnLoan(${l.id}, 0, 'my-loans')">İade Et</button>
+                        </td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`}`;
+    } else if (state.route === 'my-reservations') {
+        pageTitle = 'Rezervasyonlarım';
+        const myResList = db.reservations.filter(r => r.userId === user.id).sort((a,b) => b.id - a.id);
+        bodyHtml = `
+        ${myResList.length === 0 ? `<div class="card-box">Henüz bir rezervasyon kaydınız bulunmamaktadır.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Kitap</th>
+                    <th>Oluşturulma</th>
+                    <th>Ayrılan Kopya</th>
+                    <th>Son Alma Zamanı (3 Gün)</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${myResList.map(r => {
+                    const book = db.books.find(b => b.id === r.bookId);
+                    const copy = r.allocatedCopyId ? db.copies.find(c => c.id === r.allocatedCopyId) : null;
+                    return `
+                    <tr>
+                        <td><strong><a onclick="navigate('book-detail', {id: ${r.bookId}})">${esc(book ? book.title : 'Kitap')}</a></strong></td>
+                        <td>${fmtDateTime(r.createdAt)}</td>
+                        <td>${esc(copy ? copy.inventoryCode : '—')}</td>
+                        <td>${r.expiresAt ? fmtDateTime(r.expiresAt) : '—'}</td>
+                        <td><span class="status-badge ${r.status === 'allocated' ? 'status-ok' : 'status-warn'}">${r.status === 'allocated' ? 'Adınıza Ayrıldı (3 Gün)' : (r.status === 'waiting' ? 'Bekliyor' : r.status)}</span></td>
+                        <td>
+                            ${r.status === 'allocated' && r.allocatedCopyId ? `<button class="btn btn-primary" onclick="borrowCopy(${user.id}, ${r.allocatedCopyId}, 'my-loans')" style="margin-right:6px;">Kitabı Teslim Al</button>` : ''}
+                            ${['waiting','allocated'].includes(r.status) ? `<button class="btn btn-danger" onclick="cancelReservation(${r.id}, 'my-reservations')">İptal Et</button>` : '—'}
+                        </td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`}`;
+    } else if (state.route === 'my-fines') {
+        pageTitle = 'Gecikme Cezalarım ve Ödemelerim';
+        const myLoanIds = db.loans.filter(l => l.userId === user.id).map(l => l.id);
+        const myFines = db.fines.filter(f => myLoanIds.includes(f.loanId));
+        bodyHtml = `
+        ${myFines.length === 0 ? `<div class="card-box">Gecikme cezanız bulunmamaktadır.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Ceza #</th>
+                    <th>Kitap</th>
+                    <th>Hesaplanan Ceza</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${myFines.map(f => {
+                    const loan = db.loans.find(l => l.id === f.loanId);
+                    const copy = loan ? db.copies.find(c => c.id === loan.copyId) : null;
+                    const book = copy ? db.books.find(b => b.id === copy.bookId) : null;
+                    return `
+                    <tr>
+                        <td>#${f.id}</td>
+                        <td>${esc(book ? book.title : 'Kitap')} (${esc(copy ? copy.inventoryCode : '-')})</td>
+                        <td><strong>${(f.amountInKurus / 100).toFixed(2).replace('.', ',')} TL</strong></td>
+                        <td><span class="status-badge status-err">Kayıtlı Ceza</span></td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`}`;
+    } else if (state.route === 'notifications') {
+        pageTitle = 'Sistem İçi Bildirimlerim';
+        const notifs = db.notifications.filter(n => n.userId === user.id).sort((a,b) => b.id - a.id);
+        bodyHtml = `
+        ${notifs.length === 0 ? `<div class="card-box">Henüz sistem içi bildiriminiz bulunmamaktadır.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Bildirim Mesajı</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${notifs.map(n => `
+                    <tr>
+                        <td>${fmtDateTime(n.createdAt)}</td>
+                        <td><strong>${esc(n.message)}</strong></td>
+                        <td><span class="status-badge ${n.readAt ? 'status-ok' : 'status-warn'}">${n.readAt ? 'Okundu' : 'Yeni'}</span></td>
+                        <td>
+                            <a class="btn" onclick="navigate('my-reservations')">Rezervasyonuma Git</a>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>`}`;
+    } else if (state.route === 'librarian-loans') {
+        pageTitle = 'Ödünç Verme ve İade İşlemleri';
+        const activeLoans = db.loans.filter(l => !l.returnedAt);
+        bodyHtml = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Ödünç #</th>
+                    <th>Üye</th>
+                    <th>Kitap & Kopya</th>
+                    <th>Son Teslim</th>
+                    <th>Rezervasyon Sırası</th>
+                    <th>İade İşlemi</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${activeLoans.map(l => {
+                    const m = db.users.find(u => u.id === l.userId);
+                    const c = db.copies.find(x => x.id === l.copyId);
+                    const b = c ? db.books.find(x => x.id === c.bookId) : null;
+                    const w = c ? db.reservations.find(r => r.bookId === c.bookId && r.status === 'waiting') : null;
+                    const wu = w ? db.users.find(u => u.id === w.userId) : null;
+                    return `
+                    <tr>
+                        <td>#${l.id}</td>
+                        <td>${esc(m ? m.name : 'Üye')}</td>
+                        <td><strong>${esc(b ? b.title : 'Kitap')}</strong> (<code>${esc(c ? c.inventoryCode : '-')}</code>)</td>
+                        <td>${fmtDate(l.dueAt)}</td>
+                        <td>${wu ? `<span class="status-badge status-warn">Sıradaki: ${esc(wu.name)}</span>` : 'Bekleyen yok'}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="returnLoan(${l.id}, 0, 'librarian-loans')">Normal İade Al</button>
+                            <button class="btn" onclick="returnLoan(${l.id}, 5, 'librarian-loans')">+5 Gün Gecikmeli İade</button>
+                        </td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`;
+    } else if (state.route === 'librarian-reservations') {
+        pageTitle = 'Rezervasyon Sırası Yönetimi';
+        const queue = db.reservations.filter(r => ['waiting','allocated'].includes(r.status));
+        bodyHtml = `
+        ${queue.length === 0 ? `<div class="card-box">Mesaj alanı: Bekleyen rezervasyon yok.</div>` : `
+        <table>
+            <thead>
+                <tr>
+                    <th>Sıra</th>
+                    <th>Kitap</th>
+                    <th>Üye</th>
+                    <th>Kopya</th>
+                    <th>Son Alma Zamanı</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${queue.map((r, idx) => {
+                    const b = db.books.find(x => x.id === r.bookId);
+                    const m = db.users.find(x => x.id === r.userId);
+                    const c = r.allocatedCopyId ? db.copies.find(x => x.id === r.allocatedCopyId) : null;
+                    return `
+                    <tr>
+                        <td><strong>${idx+1}</strong></td>
+                        <td>${esc(b ? b.title : 'Kitap')}</td>
+                        <td>${esc(m ? m.name : 'Üye')}</td>
+                        <td>${esc(c ? c.inventoryCode : '—')}</td>
+                        <td>${r.expiresAt ? fmtDateTime(r.expiresAt) : '—'}</td>
+                        <td><span class="status-badge ${r.status === 'allocated' ? 'status-ok' : 'status-warn'}">${r.status === 'allocated' ? 'Ayrıldı (3 Gün)' : 'Bekliyor'}</span></td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>`}
+        <p style="font-weight: 600;">Üç gün içinde alınmazsa kopya sıradaki uygun üyeye ayrılır.</p>`;
+    }
+
+    const html = `
+    <div class="top-moss-bar">
+        <div class="role-list">
+            <span class="role-label">Hızlı Hesap Geçişi:</span>
+            ${db.users.filter(u => u.active).map(u => {
+                const rTag = u.role === 'librarian' ? 'Görevli' : (u.role === 'admin' ? 'Yönetici' : 'Üye');
+                return `<a class="role-pill ${user && user.id === u.id ? 'active' : ''}" onclick="switchUser(${u.id})">${esc(u.name)} (${rTag})</a>`;
+            }).join('')}
+        </div>
+        <div>
+            <button class="role-pill reset-btn" onclick="resetAllDemoData()">Verileri Sıfırla</button>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <div>
+            <a onclick="navigate('catalog')" class="brand-logo">kütüphane &amp; öneri</a>
+            <span class="brand-sub">Ödünç Sistemi ve Öneri Motoru</span>
+        </div>
+        ${user ? `
+            <nav class="main-nav">
+                <a onclick="navigate('catalog')">katalog</a>
+                <a onclick="navigate('my-loans')">ödünçlerim</a>
+                <a onclick="navigate('my-reservations')">rezervasyonlarım</a>
+                <a onclick="navigate('my-fines')">cezalarım</a>
+                <a onclick="navigate('notifications')">
+                    bildirimlerim
+                    ${unreadCount > 0 ? `<span class="notif-count">${unreadCount}</span>` : ''}
+                </a>
+                ${['librarian','admin'].includes(user.role) ? `
+                    <a class="staff-link" onclick="navigate('librarian-loans')">ödünç &amp; iade</a>
+                    <a class="staff-link" onclick="navigate('librarian-reservations')">rezervasyon sırası</a>
+                ` : ''}
+            </nav>
+            <div class="header-user">
+                <span><strong>${esc(user.name)}</strong> (${esc(user.memberNumber)})</span>
+                <a onclick="logoutUser()" class="btn" style="padding: 5px 14px; font-size: 12px;">çıkış</a>
+            </div>
+        ` : `
+            <nav class="main-nav">
+                <a onclick="navigate('login')">giriş yap</a>
+                <a onclick="navigate('register')">kaydol</a>
+            </nav>
+        `}
+    </header>
+
+    <div class="trim-border"></div>
+
+    <div class="striped-stage">
+        <main class="cream-sheet">
+            <div class="sheet-header">
+                <h1 class="sheet-title">${esc(pageTitle)}</h1>
+                <div class="sheet-meta">
+                    ${user ? `${user.role === 'librarian' ? 'Kütüphane Görevlisi' : (user.role === 'admin' ? 'Sistem Yöneticisi' : 'Üye Paneli')} &mdash; ${esc(user.memberNumber)}` : 'Kullanıcı Oturumu'}
+                </div>
+            </div>
+            ${state.flashSuccess ? `<div class="alert alert-success">${esc(state.flashSuccess)}</div>` : ''}
+            ${state.flashError ? `<div class="alert alert-error">Hata alanı: ${esc(state.flashError)}</div>` : ''}
+            ${bodyHtml}
+        </main>
+    </div>`;
+
+    document.getElementById('app').innerHTML = html;
+}
+
+window.switchUser = function(id) {
+    db.currentUserId = id;
+    saveDb();
+    const u = getCurrentUser();
+    navigate(u && u.role === 'librarian' ? 'librarian-loans' : 'catalog', {}, `Aktif hesap değiştirildi: ${u.name} (${u.memberNumber})`);
+};
+window.logoutUser = function() {
+    db.currentUserId = null;
+    saveDb();
+    navigate('login', {}, 'Oturumunuz güvenli bir şekilde sonlandırıldı.');
+};
+window.handleLogin = function(e) {
+    e.preventDefault();
+    const cred = document.getElementById('login_cred').value.trim().toLowerCase();
+    const pass = document.getElementById('login_pass').value;
+    const u = db.users.find(x =>
+        x.email.toLowerCase() === cred ||
+        x.email.split('@')[0].toLowerCase() === cred ||
+        x.memberNumber.toLowerCase() === cred ||
+        x.name.toLowerCase() === cred ||
+        x.name.toLowerCase().startsWith(cred)
+    );
+    if (!u || !pass) {
+        navigate('login', {}, null, 'Kullanıcı adı veya şifre hatalı.');
+        return;
+    }
+    db.currentUserId = u.id;
+    saveDb();
+    navigate('catalog', {}, `Hoş geldiniz, ${u.name} (${u.memberNumber}). Giriş başarılı.`);
+};
+window.handleRegister = function(e) {
+    e.preventDefault();
+    const name = document.getElementById('reg_name').value.trim();
+    const email = document.getElementById('reg_email').value.trim();
+    const pass = document.getElementById('reg_pass').value;
+    if (db.users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+        navigate('register', {}, null, 'Bu e-posta adresi ile kayıtlı bir üye zaten mevcut.');
+        return;
+    }
+    const id = nextId(db.users);
+    const memberNumber = 'UYE-' + String(id).padStart(4, '0');
+    const newUser = { id, name, email, password: pass, role: 'member', active: true, memberNumber };
+    db.users.push(newUser);
+    db.currentUserId = id;
+    saveDb();
+    navigate('catalog', {}, `Kaydınız tamamlandı, ${name}. Kendi hesabınızla giriş yapıldı (Üye No: ${memberNumber}).`);
+};
+window.handleCatalogSearch = function(e) {
+    e.preventDefault();
+    navigate('catalog', {
+        q: document.getElementById('cat_q').value,
+        categoryId: Number(document.getElementById('cat_id').value)
+    });
+};
+window.borrowCopy = function(userId, copyId, returnRoute, params = {}) {
+    const activeCount = db.loans.filter(l => l.userId === userId && !l.returnedAt).length;
+    if (activeCount >= 5) {
+        navigate(returnRoute, params, null, 'Ödünç limiti aşıldı! Bir üye aynı anda en fazla 5 aktif kitap ödünç alabilir.');
+        return;
+    }
+    const copy = db.copies.find(c => c.id === copyId);
+    if (!copy || copy.status === 'loaned') {
+        navigate(returnRoute, params, null, 'Bu kitap kopyası şu anda başka bir üyede ödünçtedir.');
+        return;
+    }
+    const alloc = db.reservations.find(r => r.allocatedCopyId === copyId && r.status === 'allocated');
+    if (alloc) {
+        if (alloc.userId !== userId) {
+            navigate(returnRoute, params, null, 'Bu kopya rezervasyon sırasındaki başka bir üyeye ayrılmıştır.');
+            return;
+        }
+        alloc.status = 'completed';
+    }
+    const now = new Date();
+    const due = addDays(now, 14);
+    db.loans.push({
+        id: nextId(db.loans),
+        userId,
+        copyId,
+        borrowedAt: now.toISOString(),
+        dueAt: due.toISOString(),
+        returnedAt: null,
+        renewalCount: 0
+    });
+    copy.status = 'loaned';
+    saveDb();
+    const book = db.books.find(b => b.id === copy.bookId);
+    navigate(returnRoute, params, `Ödünç işlemi tamamlandı! '${book ? book.title : 'Kitap'}' (${copy.inventoryCode}) kaydedildi. Son teslim tarihi: ${fmtDate(due)}.`);
+};
+window.joinReservationQueue = function(bookId) {
+    const user = getCurrentUser();
+    const existing = db.reservations.find(r => r.userId === user.id && r.bookId === bookId && ['waiting','allocated'].includes(r.status));
+    if (existing) {
+        navigate('book-detail', {id: bookId}, null, 'Bu kitap için zaten aktif bir rezervasyonunuz bulunmaktadır.');
+        return;
+    }
+    const res = {
+        id: nextId(db.reservations),
+        userId: user.id,
+        bookId,
+        allocatedCopyId: null,
+        createdAt: new Date().toISOString(),
+        allocatedAt: null,
+        expiresAt: null,
+        status: 'waiting'
+    };
+    db.reservations.push(res);
+    saveDb();
+    const q = db.reservations.filter(r => r.bookId === bookId && ['waiting','allocated'].includes(r.status));
+    navigate('book-detail', {id: bookId}, `Rezervasyon sırasına eklendiniz! Rezervasyon sıranız: ${q.length}. Kitap iade edildiğinde 3 gün süreyle adınıza ayrılacak ve bildirim alacaksınız.`);
+};
+window.cancelReservation = function(resId, returnRoute) {
+    const r = db.reservations.find(x => x.id === resId);
+    if (!r) return;
+    const copyId = r.allocatedCopyId;
+    r.status = 'cancelled';
+    r.allocatedCopyId = null;
+    if (copyId) allocateNextForCopy(copyId);
+    saveDb();
+    navigate(returnRoute, {}, 'Rezervasyon kaydınız iptal edildi.');
+};
+window.renewLoan = function(loanId) {
+    const l = db.loans.find(x => x.id === loanId);
+    if (!l || l.renewalCount >= 1) {
+        navigate('my-loans', {}, null, 'Bu kitap için uzatma hakkı kullanılmış.');
+        return;
+    }
+    l.dueAt = addDays(new Date(l.dueAt), 14).toISOString();
+    l.renewalCount++;
+    saveDb();
+    navigate('my-loans', {}, `Ödünç süresi 14 gün uzatıldı! Yeni teslim tarihi: ${fmtDate(l.dueAt)} (Uzatma hakkı: 1 / 1).`);
+};
+window.returnLoan = function(loanId, simulateDaysLate, returnRoute) {
+    const l = db.loans.find(x => x.id === loanId);
+    if (!l || l.returnedAt) return;
+    const now = simulateDaysLate > 0 ? addDays(new Date(l.dueAt), simulateDaysLate) : new Date();
+    l.returnedAt = now.toISOString();
+    const daysLate = Math.max(0, Math.floor((now - new Date(l.dueAt)) / 86400000));
+    const fineKurus = Math.min(10000, daysLate * 500);
+    if (fineKurus > 0) {
+        db.fines.push({ id: nextId(db.fines), loanId: l.id, amountInKurus: fineKurus, calculatedAt: now.toISOString() });
+    }
+    const allocRes = allocateNextForCopy(l.copyId, now);
+    saveDb();
+    let msg = `Kitap iadesi başarıyla kaydedildi. Gecikme Cezası: ${(fineKurus/100).toFixed(2).replace('.',',')} TL.`;
+    if (allocRes) {
+        const u = db.users.find(x => x.id === allocRes.userId);
+        msg += ` Rezervasyon sırasındaki ilk uygun üye (${u ? u.name : 'Üye'}) için kopya 3 gün süreyle ayrıldı ve sistem içi bildirim gönderildi!`;
+    } else {
+        msg += ` Bekleyen rezervasyon olmadığı için kopya 'Müsait' durumuna geçirildi.`;
+    }
+    navigate(returnRoute, {}, msg);
+};
+window.resetAllDemoData = function() {
+    localStorage.removeItem(STORAGE_KEY);
+    db = getDefaultData();
+    saveDb();
+    navigate('catalog', {}, 'Tüm JSON verileri ilk sunum başlangıç durumuna sıfırlandı.');
+};
+
+render();
+</script>
+</body>
+</html>
