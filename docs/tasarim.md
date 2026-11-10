@@ -1,4 +1,10 @@
 # Kütüphane Ödünç Sistemi ve Öneri Motoru Tasarım Belgesi
+| Süre     | Ne anlatılacak?                                                        | Kim anlatacak?         | Görev                | Gösterilecek yer                  |
+| -------- | ---------------------------------------------------------------------- | ---------------------- | -------------------- | --------------------------------- |
+| 3 dakika | Gereksinimler ve SRS belgesindeki ilgili bölümler                      | Remziye Ersun          | Arayüz               | SRS.md                            |
+| 2 dakika | Veritabanı tasarımı, sıralama diyagramı, ER diyagramı ve 3NF gerekçesi | Ümmügülsüm Kitapçıoğlu | Veritabanı görevlisi | tasarım.md, 3. ve 4. bölümler     |
+| 2 dakika | Mimari, temel sınıflar, tasarım desenleri ve gerekçeleri               | Gizem Naz Karasu       | Mimarlık             | tasarım.md, 1., 2. ve 5. bölümler |
+
 
 ## 1. Mimari
 
@@ -824,6 +830,7 @@ BOOK_AUTHORS tablosunda birleşik anahtar book_id ve author_id alanlarından olu
 Kitaplarda kategori adı yerine category_id, kopyalarda kitap adı yerine book_id ve ödünç kayıtlarında üye adı yerine user_id tutulur. Böylece başka bir varlığın bilgileri tekrar edilmez ve 3NF sağlanır. Bildirimdeki user_id ise rezervasyon sahibinden türetilen bir kopya bilgi değil, bildirimin alıcısını ifade eder; mesaj, oluşturulduğu andaki içeriği koruyan bir kayıttır.
 
 Öneri puanları, aktif ödünç sayıları ve kalan ceza borcu ayrı alanlarda tekrar saklanmayacak; ilgili kayıtlar üzerinden hesaplanacaktır.
+Aynı fiziksel kopyanın iki üyeye verilmesini önlemek için transaction içinde satır kilidi kullanmayı planladık. Bunun için MySQL’in SELECT ... FOR UPDATE mekanizmasını kullanacağız.”
 
 ## 5. Tasarım Desenleri
 
